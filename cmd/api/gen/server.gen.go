@@ -46,19 +46,19 @@ func (siw *ServerInterfaceWrapper) GetPing(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusBadRequest, fmt.Errorf("Invalid format for query string: %w", err).Error())
 	}
 
-	// ------------- Required query parameter "version" -------------
+	// ------------- Required query parameter "option" -------------
 
-	if paramValue := c.Query("version"); paramValue != "" {
+	if paramValue := c.Query("option"); paramValue != "" {
 
 	} else {
-		err = fmt.Errorf("Query argument version is required, but not found")
+		err = fmt.Errorf("Query argument option is required, but not found")
 		c.Status(fiber.StatusBadRequest).JSON(err)
 		return err
 	}
 
-	err = runtime.BindQueryParameter("form", true, true, "version", query, &params.Version)
+	err = runtime.BindQueryParameter("form", true, true, "option", query, &params.Option)
 	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, fmt.Errorf("Invalid format for parameter version: %w", err).Error())
+		return fiber.NewError(fiber.StatusBadRequest, fmt.Errorf("Invalid format for parameter option: %w", err).Error())
 	}
 
 	return siw.Handler.GetPing(c, params)
@@ -156,11 +156,11 @@ func (sh *strictHandler) GetPing(ctx *fiber.Ctx, params GetPingParams) error {
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/1xRwW7CMAz9lcrbMaLddsttp4nDJO6IQ1YMGNHEOAYNVfn3ySnd0E5unefn955H6NPA",
-	"KWLUDH6E3B9wCPVzleLeKktiFCWsXaapi99h4BOCBzacA72x/WUVQ5TiQPB8IcEt+PU0tvlFpa8j9grF",
-	"YBR3yRiVtPJ9UqQhnBobad5XyyajXFHAwRUlU4rg4WXRLTooDhJjDEzg4a22HHDQQ1XazlL3qFbMRVBK",
-	"cbkFDx+oK6rCOUgYUFEy+PUIZPznC8oNHMQwmKR58aMnlQu6e15V/j//GwNnTjFPwb12nZU+RcVYBQXm",
-	"E/VVUnvM5mt84HsW3IGHp/bvQO39Om09TQ1vi7kXYp1iYdRmXmrvpZSfAAAA//+QOoaX4QEAAA==",
+	"H4sIAAAAAAAC/1yRQW/iQAyF/0r0do8RyW5vc+up4lCJO+IwDQYGkRnjMagomv9eeQIt6smJ8/zyPXvC",
+	"kEZOkaJmuAl5ONDo6+Mqxb1VlsQkGqh2Ocxd+vQjnwgObLoWemN7yyqmKKWF0PkShLZw63ls861KH0ca",
+	"FMVkIe6SOWrQ6vceYhj9qbGR5nW1bDLJlQQtriQ5pAiHf4t+0aO0SEzRc4DDS221YK+HSto9UPekViyF",
+	"15DicguHN9JVqODsxY+kJBluPSGY//lCckOL6MeKyzaH50gqF2rv66r0v+JvTJw5xTzv7X/fWxlSVIqV",
+	"xzOfwlCJumO2WNOT31+hHRz+dD/36e7H6epl6u62lAcJM50DkzaPn9r3UspXAAAA//8482Py4AEAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

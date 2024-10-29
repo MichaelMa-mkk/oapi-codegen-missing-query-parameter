@@ -7,7 +7,7 @@ paths:
     get:
       parameters:
       - in: query
-        name: version
+        name: option
         required: true
         schema:
           type: string

@@ -10,5 +10,5 @@ type Pong struct {
 
 // GetPingParams defines parameters for GetPing.
 type GetPingParams struct {
-	Version string `form:"version" json:"version"`
+	Option string `form:"option" json:"option"`
 }

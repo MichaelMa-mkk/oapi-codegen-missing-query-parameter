@@ -2,11 +2,12 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"context"
+	"errors"
 	api "oapi-codegen-sample/cmd/api/gen"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rs/zerolog/log"
 )
 
 //go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=gen/types.cfg.yaml ./api.yaml
@@ -15,14 +16,11 @@ import (
 type Server struct{}
 
 // (GET /ping)
-func (Server) GetPing(ctx *fiber.Ctx, _ api.GetPingParams) error {
-	resp := api.Pong{
-		Ping: "pong",
+func (Server) GetPing(_ context.Context, request api.GetPingRequestObject) (api.GetPingResponseObject, error) {
+	if request.Params.Option == "error" {
+		return nil, errors.New("customised internal server error")
 	}
-
-	return ctx.
-		Status(http.StatusOK).
-		JSON(resp)
+	return api.GetPing200JSONResponse{Ping: "pong"}, nil
 }
 
 func main() {
@@ -31,8 +29,8 @@ func main() {
 
 	app := fiber.New()
 
-	api.RegisterHandlers(app, server)
+	api.RegisterHandlers(app, api.NewStrictHandler(server, nil))
 
 	// And we serve HTTP until the world ends.
-	log.Fatal(app.Listen("0.0.0.0:8080"))
+	log.Fatal().Err(app.Listen("0.0.0.0:8080")).Msg("Failed to start server")
 }
